@@ -53,7 +53,13 @@ impl Bot {
             let mut line = String::new();
             stdin().read_line(&mut line)?;
 
-            match self.state.read_line(&line.trim())? {
+            let line = line.trim();
+
+            if line == "STOP" {
+                break
+            }
+
+            match self.state.read_line(line)? {
                 BotInstruction::ToState(state) => {
                     // println!("Previous state: {:?}", self.state);
                     self.state = state;
@@ -65,6 +71,8 @@ impl Bot {
                 }
             };
         }
+
+        Ok(())
     }
 }
 
